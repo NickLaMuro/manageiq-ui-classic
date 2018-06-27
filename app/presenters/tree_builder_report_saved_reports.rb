@@ -30,8 +30,22 @@ class TreeBuilderReportSavedReports < TreeBuilderReportReportsClass
   end
 
   def x_get_tree_custom_kids(object, count_only, _options)
-    scope = MiqReportResult.with_current_user_groups_and_report(object[:id].split('-').last)
-    count_only ? 1 : scope.order("last_run_on DESC").includes(:miq_task).to_a
+    if count_only
+      1
+    else
+      result_id        = object[:id].split('-').last
+      task_state_arel  = MiqTask.arel_table[:state]
+                                .as(TreeNode::MiqReportResult::STATE_ATTRIBUTE)
+      task_status_arel = MiqTask.arel_table[:status]
+                                .as(TreeNode::MiqReportResult::STATUS_ATTRIBUTE)
+
+      MiqReportResult.with_current_user_groups_and_report(result_id)
+                     .select(:id, :name, :last_run_on)
+                     .select(task_state_arel, task_status_arel)
+                     .joins(:miq_task)
+                     .order("last_run_on DESC").tap {|s| puts; puts; puts s.to_sql; puts; puts; }
+                     .to_a
+    end
   end
 
   # Scope on reports that have report results.
