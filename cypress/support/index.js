@@ -18,3 +18,9 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+const { env } = require('process')
+
+if (env.TRAVIS || env.CI) {
+  Cypress.Screenshot.defaults({screenshotOnRunFailure: false})
+}
