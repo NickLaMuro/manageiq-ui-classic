@@ -88,30 +88,32 @@ namespace :webpack do
 end
 
 # compile and clobber when running assets:* tasks
-if Rake::Task.task_defined?("assets:precompile")
+if Rake::Task.task_defined?("assets:precompile") || Rake::Task.task_defined?("app:assets:precompile")
+  app_prefix = "app:" if Rake::Task.task_defined?("app:assets:precompile")
   if !ENV["TRAVIS"] || ENV['TEST_SUITE'] == 'spec:cypress'
-    Rake::Task["assets:precompile"].enhance do
+    Rake::Task["#{app_prefix}assets:precompile"].enhance do
       Rake::Task["webpack:compile"].invoke
     end
   end
 
-  Rake::Task["assets:precompile"].actions.each do |action|
+  Rake::Task["#{app_prefix}assets:precompile"].actions.each do |action|
     if action.source_location[0].include?(File.join("lib", "tasks", "webpacker"))
-      Rake::Task["assets:precompile"].actions.delete(action)
+      Rake::Task["#{app_prefix}assets:precompile"].actions.delete(action)
     end
   end
 end
 
-if Rake::Task.task_defined?("assets:clobber")
+if Rake::Task.task_defined?("assets:clobber") || Rake::Task.task_defined?("app:assets:clobber")
+  app_prefix = "app:" if Rake::Task.task_defined?("app:assets:clobber")
   if !ENV["TRAVIS"] || ENV['TEST_SUITE'] == 'spec:cypress'
-    Rake::Task["assets:clobber"].enhance do
+    Rake::Task["#{app_prefix}assets:clobber"].enhance do
       Rake::Task["webpack:clobber"].invoke
     end
   end
 
-  Rake::Task["assets:clobber"].actions.each do |action|
+  Rake::Task["#{app_prefix}assets:clobber"].actions.each do |action|
     if action.source_location[0].include?(File.join("lib", "tasks", "webpacker"))
-      Rake::Task["assets:clobber"].actions.delete(action)
+      Rake::Task["#{app_prefix}assets:clobber"].actions.delete(action)
     end
   end
 end
