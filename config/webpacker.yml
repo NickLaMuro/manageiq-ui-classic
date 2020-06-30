@@ -32,5 +32,8 @@ development:
 test:
   <<: *default
 
+integration:
+  <<: *default
+
 production:
   <<: *default
