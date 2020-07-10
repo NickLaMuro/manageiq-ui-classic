@@ -4,7 +4,7 @@ describe('GTL', () => {
   });
 
   it("with data", () => {
-    cy.menu("Configuration");
+    cy.menu("Configuration", "Profiles");
     cy.get('tr').last().click();
     cy.gtl().should('be.visible');
   });
