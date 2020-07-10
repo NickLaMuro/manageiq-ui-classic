@@ -19,6 +19,12 @@ namespace :cypress do
       sh "#{yarn_cmd} cypress run --headless --browser firefox --config video=false"
     end
 
+    desc "Stop the backend Rails server"
+    task :stop do |rake_task|
+      app_prefix = rake_task.name.chomp('cypress:ui:stop')
+      Rake::Task["#{app_prefix}integration:stop_server"].invoke
+    end
+
     task :setup do |rake_task|
       app_prefix = rake_task.name.chomp('cypress:ui:setup')
       Rake::Task["#{app_prefix}integration:with_ui"].invoke
