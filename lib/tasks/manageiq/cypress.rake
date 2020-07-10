@@ -37,16 +37,19 @@ namespace :cypress do
     # Aliases for running with CYPRESS_DEV
     namespace :dev do
       desc "'Development Mode' for cypress:ui:seed"
-      task :seed  => [:env, 'cypress:ui:seed']
+      task :seed => [:env, 'cypress:ui:seed']
 
       desc "'Development Mode' for cypress:ui:open"
-      task :open  => [:env, 'cypress:ui:open']
+      task :open => [:env, 'cypress:ui:open']
 
       desc "'Development Mode' for cypress:ui:run"
-      task :run   => [:env, 'cypress:ui:run']
+      task :run => [:env, 'cypress:ui:run']
 
       desc "'Development Mode' for cypress:ui:setup"
       task :setup => [:env, 'cypress:ui:setup']
+
+      desc "'Development Mode' for cypress:ui:stop"
+      task :stop => [:env, 'cypress:ui:stop']
 
       # Helper task to defaulte the CYPRESS_DEV env var to "1"
       task :env do
